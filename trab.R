@@ -1,64 +1,49 @@
-df = read.csv2("C:/Users/12161003882/Desktop/student-por.csv")
+# dataset: https://archive.ics.uci.edu/ml/datasets/Bike+Sharing+Dataset
+
+df = read.csv("C:/Users/fiodo/OneDrive/Área de Trabalho/Python, R, etc/trab ramon/day.csv")
 
 View(df)
 str(df)
 
 # Transformando em numerico para correlacao
 
-levels(df$school) = c(0,1)
-df$school = as.numeric(df$school)
-
-levels(df$sex) = c(0,1)
-df$sex = as.numeric(df$sex)
-
-levels(df$address) = c(0,1)
-df$address = as.numeric(df$address)
-
-levels(df$famsize)= c(0,1)
-df$famsize = as.numeric(df$famsize)
-
-levels(df$Pstatus) = c(0,1)
-df$Pstatus = as.numeric(df$Pstatus)
-
-levels(df$Mjob) = c(0,1,2,3,4)
-df$Mjob = as.numeric(df$Mjob)
-
-levels(df$Fjob) = c(0,1,2,3,4)
-df$Fjob = as.numeric(df$Fjob)
-
-levels(df$reason) = c(0,1,2,3)
-df$reason = as.numeric(df$reason)
-
-levels(df$guardian) = c(0,1,2)
-df$guardian = as.numeric(df$guardian)
-
-levels(df$schoolsup) = c(0,1)
-df$schoolsup = as.numeric(df$schoolsup)
-
-levels(df$famsup) = c(0,1)
-df$famsup = as.numeric(df$famsup)
-
-levels(df$paid) = c(0,1)
-df$paid = as.numeric(df$paid)
-
-levels(df$activities) = c(0,1)
-df$activities = as.numeric(df$activities)
-
-levels(df$nursery) = c(0,1)
-df$nursery = as.numeric(df$nursery)
-
-levels(df$higher) = c(0,1)
-df$higher = as.numeric(df$higher)
-
-levels(df$internet) = c(0,1)
-df$internet = as.numeric(df$internet)
-
-levels(df$romantic) = c(0,1)
-df$romantic = as.numeric(df$romantic)
-
+install.packages("corrplot")
 library(corrplot)
 corrplot(cor(df))
 
+levels(df$dteday)
+df$dteday <- NULL
+
 correlaco = cor(df)
-# GRAVANDO DADOS
-write.xls(df, "C:/Users/12161003882/Desktop/ramon.xls") 
+View (correlaco)
+
+# ------------------------ Modelo 1 ------------------------ 
+summary(lm(df$cnt ~ df$temp + df$atemp + df$casual))
+
+# ------------------------ Modelo 3 ------------------------ 
+summary(lm(df$cnt ~ df$casual))
+# 55% do modelo é explicado por esses dados
+R2 = 2.894e+03 + 1.898e+00 * df$casual
+
+
+# ------------------------ Modelo 2 - escolhido ------------------------ 
+modelo = lm(df$cnt ~ df$casual + df$atemp)
+summary(modelo)
+# 55% do modelo é explicado por esses dados
+R1 = 1.261e+03 + 1.320e+00 * df$casual + 4.476+03 * df$atemp
+
+# Nível de sign a 5%
+
+# Resíduos do modelo (diferença entre os dados reais e a linha de melhor ajuste)
+modelo$residuals
+
+# Valores da reta de melhor ajuste do modelo (valores ajustados)
+modelo$fitted.values
+
+#########################################################
+# Avaliar o modelo com as variáveis independentes individuais e em duplas (PNB e PIB), (ICR e PIB) e (PNB e ICR)
+
+
+
+
+
